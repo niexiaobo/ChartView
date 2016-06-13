@@ -12,7 +12,11 @@ static NSString * CellIdentifier = @"ChartCollectionCell";
 
 @interface ChartListCollectionViewCell()
 
-@property (strong, nonatomic)UICollectionView *collectionView;
+
+@property (nonatomic, assign) double pinchGestureSize;
+
+
+
 @end
 
 @implementation ChartListCollectionViewCell
@@ -33,6 +37,7 @@ static NSString * CellIdentifier = @"ChartCollectionCell";
         
         [self addSubview:self.collectionView];
         
+        
     }
     
     return _collectionView;
@@ -40,6 +45,7 @@ static NSString * CellIdentifier = @"ChartCollectionCell";
 - (void)awakeFromNib {
     self.collectionView.hidden=NO;
 }
+
 
 #pragma mark -- UICollectionViewDataSource
 
@@ -60,9 +66,14 @@ static NSString * CellIdentifier = @"ChartCollectionCell";
 {
     
     ChartCollectionCell * cell = [collectionView dequeueReusableCellWithReuseIdentifier:CellIdentifier forIndexPath:indexPath];
+    CGRect cellFrame=cell.frame;
+    cellFrame.size.width=ColloWidth*self.currentScale;
+    cell.frame=cellFrame;
     
+    
+    cell.currentScale=self.currentScale;
     [cell layoutSubviews];
-    
+    //    cell.transform = CGAffineTransformMakeScale(self.currentScale, self.currentScale);
     cell.chartName1.text=[NSString stringWithFormat:@"数据A%ld",(long)indexPath.row];
     cell.chartName2.text=[NSString stringWithFormat:@"数据B%ld",(long)indexPath.row];
     
@@ -74,8 +85,11 @@ static NSString * CellIdentifier = @"ChartCollectionCell";
 //定义每个Item 的大小
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
+    
+    
+    
     //宽 高
-    return CGSizeMake(ColloWidth, ColloHeight);
+    return CGSizeMake(ColloWidth*self.currentScale, ColloHeight);
     
 }
 
@@ -90,8 +104,8 @@ static NSString * CellIdentifier = @"ChartCollectionCell";
 //UICollectionView被选中时调用的方法
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-//    ChartCollectionCell * cell = (ChartCollectionCell *)[collectionView cellForItemAtIndexPath:indexPath];
-//    cell.backgroundColor=[UIColor blueColor];
+    //    ChartCollectionCell * cell = (ChartCollectionCell *)[collectionView cellForItemAtIndexPath:indexPath];
+    //    cell.backgroundColor=[UIColor blueColor];
 }
 
 //返回这个UICollectionView是否可以被选择
@@ -103,11 +117,11 @@ static NSString * CellIdentifier = @"ChartCollectionCell";
     
     //设置Cell的动画效果为3D效果
     //设置x和y的初始值为0.1；
-    cell.layer.transform = CATransform3DMakeScale(0.1, 0.1, 1);
-    //x和y的最终值为1
-    [UIView animateWithDuration:1 animations:^{
-        cell.layer.transform = CATransform3DMakeScale(1, 1, 1);
-    }];
+    //    cell.layer.transform = CATransform3DMakeScale(0.1, 0.1, 1);
+    //    //x和y的最终值为1
+    //    [UIView animateWithDuration:1 animations:^{
+    //        cell.layer.transform = CATransform3DMakeScale(1, 1, 1);
+    //    }];
     
 }
 

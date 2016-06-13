@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "ChartCollectionCell.h"
 @interface ChartListCollectionViewCell : UICollectionViewCell <UICollectionViewDelegate, UICollectionViewDataSource>
+@property (strong, nonatomic)UICollectionView *collectionView;
 @property (strong, nonatomic) ChartCollectionCell *ChartCollCell;
-
+@property(nonatomic, unsafe_unretained)CGFloat currentScale;
 @end

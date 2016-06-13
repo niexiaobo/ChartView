@@ -15,6 +15,9 @@ static NSString * CellIdentifier = @"ChartListCollectionViewCell";
 }
 @property (strong, nonatomic)UICollectionView *collectionView;
 @property (nonatomic, strong) NSMutableDictionary *contentOffsetArray;
+
+@property(nonatomic, strong)UIPinchGestureRecognizer *pinchGestureRecognizer;
+@property(nonatomic, unsafe_unretained)CGFloat currentScale;
 @end
 
 @implementation ViewController
@@ -34,8 +37,34 @@ static NSString * CellIdentifier = @"ChartListCollectionViewCell";
     [self.collectionView registerClass:[ChartListCollectionViewCell class] forCellWithReuseIdentifier:CellIdentifier];
     
     [self.view addSubview:self.collectionView];
-
+    
+    self.currentScale=1.0;
+    
+    /*create the pinch Gesture Recognizer*/
+    self.pinchGestureRecognizer = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(handlePinches:)];
+    [self.collectionView addGestureRecognizer:self.pinchGestureRecognizer];
 }
+
+#pragma mark -- UIPinchGestureRecognizer
+-(void)handlePinches:(UIPinchGestureRecognizer *)paramSender{
+    if (paramSender.state == UIGestureRecognizerStateEnded) {
+        self.currentScale = paramSender.scale;
+    }else if(paramSender.state == UIGestureRecognizerStateBegan && self.currentScale != 0.0f){
+        paramSender.scale = self.currentScale;
+    }
+    if (paramSender.scale !=NAN && paramSender.scale != 0.0) {
+        
+        
+        
+        //        paramSender.view.transform = CGAffineTransformMakeScale(paramSender.scale > 1 ? 1 : paramSender.scale, 1);
+    }
+    //    self.currentScale = paramSender.scale;
+    NSLog(@"--缩放比例-->%f<----",paramSender.scale);//缩放比例
+    [self.collectionView reloadData];
+    
+}
+
+
 #pragma mark -- UICollectionViewDataSource
 
 //定义展示的UICollectionViewCell的个数
@@ -57,6 +86,16 @@ static NSString * CellIdentifier = @"ChartListCollectionViewCell";
     ChartListCollectionViewCell * cell = [collectionView dequeueReusableCellWithReuseIdentifier:CellIdentifier forIndexPath:indexPath];
     [cell awakeFromNib];
     
+    if (self.currentScale>1) {
+        self.currentScale=1;
+    }else if (self.currentScale<0.3) {
+        self.currentScale=0.3;
+    }
+    
+    cell.currentScale=self.currentScale;
+    //    cell.currentScale=1;
+    
+    [cell.collectionView reloadData];
     return cell;
 }
 
@@ -90,14 +129,14 @@ static NSString * CellIdentifier = @"ChartListCollectionViewCell";
 }
 
 -(void)collectionView:(UICollectionView *)collectionView willDisplayCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath{
-
+    
     //设置Cell的动画效果为3D效果
     //设置x和y的初始值为0.1；
-    cell.layer.transform = CATransform3DMakeScale(0.1, 0.1, 1);
-    //x和y的最终值为1
-    [UIView animateWithDuration:1 animations:^{
-        cell.layer.transform = CATransform3DMakeScale(1, 1, 1);
-    }];
-
+    //    cell.layer.transform = CATransform3DMakeScale(0.1, 0.1, 1);
+    //    //x和y的最终值为1
+    //    [UIView animateWithDuration:1 animations:^{
+    //        cell.layer.transform = CATransform3DMakeScale(1, 1, 1);
+    //    }];
+    
 }
 @end

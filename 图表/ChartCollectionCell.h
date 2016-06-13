@@ -13,4 +13,6 @@
 @property (strong,nonatomic) UILabel * chartName2;
 @property (strong,nonatomic) UIView * chartView1;
 @property (strong,nonatomic) UIView * chartView2;
+@property(nonatomic, unsafe_unretained)CGFloat currentScale;
+
 @end
