@@ -49,6 +49,7 @@ static NSString * CellIdentifier = @"ChartListCollectionViewCell";
 -(void)handlePinches:(UIPinchGestureRecognizer *)paramSender{
     if (paramSender.state == UIGestureRecognizerStateEnded) {
         self.currentScale = paramSender.scale;
+        [self.collectionView reloadData];
     }else if(paramSender.state == UIGestureRecognizerStateBegan && self.currentScale != 0.0f){
         paramSender.scale = self.currentScale;
     }
@@ -60,7 +61,7 @@ static NSString * CellIdentifier = @"ChartListCollectionViewCell";
     }
     //    self.currentScale = paramSender.scale;
     NSLog(@"--缩放比例-->%f<----",paramSender.scale);//缩放比例
-    [self.collectionView reloadData];
+    
     
 }
 
@@ -132,11 +133,11 @@ static NSString * CellIdentifier = @"ChartListCollectionViewCell";
     
     //设置Cell的动画效果为3D效果
     //设置x和y的初始值为0.1；
-    //    cell.layer.transform = CATransform3DMakeScale(0.1, 0.1, 1);
-    //    //x和y的最终值为1
-    //    [UIView animateWithDuration:1 animations:^{
-    //        cell.layer.transform = CATransform3DMakeScale(1, 1, 1);
-    //    }];
+//        cell.layer.transform = CATransform3DMakeScale(0.1, 0.1, 1);
+//        //x和y的最终值为1
+//        [UIView animateWithDuration:1 animations:^{
+//            cell.layer.transform = CATransform3DMakeScale(1, 1, 1);
+//        }];
     
 }
 @end
